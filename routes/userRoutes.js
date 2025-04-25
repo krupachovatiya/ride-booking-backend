@@ -37,8 +37,6 @@ Router.post("/register", async (req, res) => {
       text: `Your code is: ${code}`,
     });
 
-    // res.status(200).json({ message: "Verification code sent to email" });
-
     const newUser = await User.create({ fullname, email, phone, password });
     console.log("User created:", newUser);
     res.status(200).json({ message: "Registered successfully", user: newUser });
