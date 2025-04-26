@@ -1,11 +1,9 @@
 const express = require("express");
 const BookRide = require("../models/BookRide");
-const path = require("path");
 const cors = require("cors");
 
 const Router = express.Router();
 Router.use(cors());
-Router.use(express.static(path.join(__dirname, "public")));
 
 const taxiData = [
   {
@@ -38,7 +36,7 @@ const taxiData = [
     starting: 100,
     charge: 12,
     seat: 6,
-    image: "/image/taxi-img3.jpg",
+    image: "/image/taxi-img1.jpg",
   },
   {
     id: 5,
@@ -46,7 +44,7 @@ const taxiData = [
     starting: 150,
     charge: 15,
     seat: 4,
-    image: "/image/taxi-img3.jpg",
+    image: "/image/taxi-img2.jpg",
   },
   {
     id: 6,

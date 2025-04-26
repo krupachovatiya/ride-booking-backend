@@ -11,6 +11,8 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+server.use("/uploads", express.static("uploads"));
+
 server.use("/user", userRoutes);
 server.use("/driver", driverRoutes);
 server.use("/book_ride", bookRideRoutes);
