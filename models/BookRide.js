@@ -16,7 +16,7 @@ let userSchema = new mongoose.Schema({
   passenger: {
     type: Number,
   },
-  car: {
+  ridetype: {
     type: String,
   },
   date: {
