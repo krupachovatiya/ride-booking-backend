@@ -5,6 +5,7 @@ const cloudinary = require("cloudinary").v2;
 
 const verificationCodes = {};
 const Router = express.Router();
+const userEmail = "mose.pfeffer@ethereal.email";
 
 cloudinary.config({
   cloud_name: "dbkosylcf",
@@ -77,7 +78,7 @@ Router.post("/register", async (req, res) => {
     verificationCodes[email] = code;
 
     await transporter.sendMail({
-      from: "elva10@ethereal.email",
+      from: userEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your code is: ${code}`,
@@ -133,7 +134,7 @@ Router.post("/register_varify_resend", async (req, res) => {
     verificationCodes[email] = code;
 
     await transporter.sendMail({
-      from: "troy.macgyver81@ethereal.email",
+      from: userEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your code is: ${code}`,
@@ -177,7 +178,7 @@ Router.post("/forgot_pass", async (req, res) => {
     verificationCodes[email] = code;
 
     await transporter.sendMail({
-      from: "elva10@ethereal.email",
+      from: userEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your code is: ${code}`,
@@ -212,7 +213,7 @@ Router.post("/forgot_pass_resend", async (req, res) => {
     verificationCodes[email] = code;
 
     await transporter.sendMail({
-      from: "elva10@ethereal.email",
+      from: userEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your code is: ${code}`,

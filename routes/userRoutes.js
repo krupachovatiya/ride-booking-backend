@@ -1,50 +1,15 @@
 const express = require("express");
-const User = require("../models/User");
+const User = require("../models/LoginUser");
 const transporter = require("../utils/mailer");
 const jwt = require("jsonwebtoken");
+const UserData = require("../models/User");
 const SECRET_KEY =
   "a406929be78ab6924730b60822d633cfb846265633e2bf4da0d41a334250c1fb";
 
 const verificationCodes = {};
+const userEmail = "mose.pfeffer@ethereal.email";
 
 const Router = express.Router();
-
-Router.get("/", async (req, res) => {
-  res.send("all user data");
-  let data = await User.find();
-  res.send(data);
-});
-
-Router.post("/register", async (req, res) => {
-  console.log("Request Body:", req.body);
-  const { fullname, email, phone, password } = req.body;
-
-  try {
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      return res.status(409).json({ message: "Email already registered" });
-    }
-
-    const code = Math.floor(100000 + Math.random() * 900000);
-
-    verificationCodes[email] = code;
-
-    await transporter.sendMail({
-      from: "elva10@ethereal.email",
-      to: email,
-      subject: "Your Verification Code",
-      text: `Your code is: ${code}`,
-    });
-
-    const newUser = await User.create({ fullname, email, phone, password });
-    console.log("User created:", newUser);
-    res.status(200).json({ message: "Registered successfully", user: newUser });
-  } catch (err) {
-    console.error("Error during registration:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-});
 
 Router.post("/register_varification", async (req, res) => {
   let data = req.body;
@@ -68,7 +33,7 @@ Router.post("/register_varification_resend", async (req, res) => {
     verificationCodes[email] = code;
 
     await transporter.sendMail({
-      from: "elva10@ethereal.email",
+      from: userEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your code is: ${code}`,
@@ -94,7 +59,7 @@ Router.post("/login", async (req, res) => {
   const { email } = req.body;
 
   try {
-    const log = await User.findOne({ email });
+    const log = await UserData.findOne({ email });
 
     if (!log?.email) {
       return res.status(404).json({ message: "User not found" });
@@ -114,7 +79,7 @@ Router.post("/forgot_pass", async (req, res) => {
   const { email } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await UserData.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: "Email not found" });
@@ -125,7 +90,7 @@ Router.post("/forgot_pass", async (req, res) => {
     verificationCodes[email] = code;
 
     await transporter.sendMail({
-      from: "elva10@ethereal.email",
+      from: userEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your code is: ${code}`,
@@ -160,7 +125,7 @@ Router.post("/forgot_pass_resend", async (req, res) => {
     verificationCodes[email] = code;
 
     await transporter.sendMail({
-      from: "elva10@ethereal.email",
+      from: userEmail,
       to: email,
       subject: "Your Verification Code",
       text: `Your code is: ${code}`,

@@ -2,6 +2,7 @@ const express = require("express");
 const userRoutes = require("./routes/userRoutes");
 const driverRoutes = require("./routes/driverRoutes");
 const bookRideRoutes = require("./routes/bookRideRoutes");
+const userDataRoutes = require("./routes/userDataRoutes");
 
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -16,6 +17,7 @@ server.use("/uploads", express.static("uploads"));
 server.use("/user", userRoutes);
 server.use("/driver", driverRoutes);
 server.use("/book_ride", bookRideRoutes);
+server.use("/user_data", userDataRoutes);
 
 server.get("/", (req, res) => {
   res.send("server is up");
