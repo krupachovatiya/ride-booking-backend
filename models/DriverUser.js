@@ -21,6 +21,6 @@ let userSchema = new mongoose.Schema({
   },
 });
 
-let DriverUser = mongoose.model("driverUser", userSchema);
+let DriverUserData = mongoose.model("driverUserData", userSchema);
 
-module.exports = DriverUser;
+module.exports = DriverUserData;
