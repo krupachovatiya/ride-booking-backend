@@ -7,7 +7,7 @@ const SECRET_KEY =
   "a406929be78ab6924730b60822d633cfb846265633e2bf4da0d41a334250c1fb";
 
 const verificationCodes = {};
-const userEmail = "mose.pfeffer@ethereal.email";
+const userEmail = "johnathan.stiedemann42@ethereal.email";
 
 const Router = express.Router();
 

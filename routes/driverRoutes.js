@@ -1,11 +1,11 @@
 const express = require("express");
 const DriverUserData = require("../models/DriverUser");
-const DriverUser = require("../models/DriverUser");
+const DriverUser = require("../models/DriverLogin");
 const transporter = require("../utils/mailer");
 
 const verificationCodes = {};
 const Router = express.Router();
-const userEmail = "mose.pfeffer@ethereal.email";
+const userEmail = "johnathan.stiedemann42@ethereal.email";
 
 Router.post("/register_varification", async (req, res) => {
   let data = req.body;
