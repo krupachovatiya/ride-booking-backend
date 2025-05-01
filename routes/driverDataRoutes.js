@@ -5,7 +5,7 @@ const cloudinary = require("cloudinary").v2;
 
 const verificationCodes = {};
 const Router = express.Router();
-const userEmail = "johnathan.stiedemann42@ethereal.email";
+const userEmail = "adelbert.zieme13@ethereal.email";
 
 cloudinary.config({
   cloud_name: "dbkosylcf",

@@ -5,7 +5,7 @@ const transporter = require("../utils/mailer");
 
 const verificationCodes = {};
 const Router = express.Router();
-const userEmail = "johnathan.stiedemann42@ethereal.email";
+const userEmail = "adelbert.zieme13@ethereal.email";
 
 Router.post("/register_varification", async (req, res) => {
   let data = req.body;
