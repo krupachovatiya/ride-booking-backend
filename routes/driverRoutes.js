@@ -5,7 +5,9 @@ const transporter = require("../utils/mailer");
 
 const verificationCodes = {};
 const Router = express.Router();
-const userEmail = "adelbert.zieme13@ethereal.email";
+const userEmail = process.env.USER_EMAIL;
+
+require("dotenv").config();
 
 Router.post("/register_varification", async (req, res) => {
   let data = req.body;

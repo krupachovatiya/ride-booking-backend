@@ -1,15 +1,13 @@
 const express = require("express");
 const User = require("../models/LoginUser");
 const transporter = require("../utils/mailer");
-const jwt = require("jsonwebtoken");
 const UserData = require("../models/User");
-const SECRET_KEY =
-  "a406929be78ab6924730b60822d633cfb846265633e2bf4da0d41a334250c1fb";
 
 const verificationCodes = {};
-const userEmail = "adelbert.zieme13@ethereal.email";
+const userEmail = process.env.USER_EMAIL;
 
 const Router = express.Router();
+require("dotenv").config();
 
 Router.post("/register_varification", async (req, res) => {
   let data = req.body;
@@ -47,14 +45,6 @@ Router.post("/register_varification_resend", async (req, res) => {
   }
 });
 
-// Router.put("/update", (req, res) => {
-//   res.send("user updated");
-// });
-
-// Router.delete("/delete", (req, res) => {
-//   res.send("user deleted");
-// });
-
 Router.post("/login", async (req, res) => {
   const { email } = req.body;
 
@@ -64,11 +54,8 @@ Router.post("/login", async (req, res) => {
     if (!log?.email) {
       return res.status(404).json({ message: "User not found" });
     }
-    const token = jwt.sign({ id: log._id, email: log.email }, SECRET_KEY, {
-      expiresIn: "1h",
-    });
 
-    res.status(200).json({ message: "Login successful", token, log });
+    res.status(200).json({ message: "Login successful", log });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error", error: err.message });

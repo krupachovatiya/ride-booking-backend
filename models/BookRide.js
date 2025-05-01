@@ -1,11 +1,16 @@
 const mongoose = require("mongoose");
 
 let userSchema = new mongoose.Schema({
-  fullname: {
-    type: String,
-  },
-  phone: {
-    type: String,
+  // fullname: {
+  //   type: String,
+  // },
+  // phone: {
+  //   type: String,
+  // },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
   pickUp: {
     type: String,

@@ -2,15 +2,18 @@ const express = require("express");
 const DriverUserData = require("../models/DriverUser");
 const transporter = require("../utils/mailer");
 const cloudinary = require("cloudinary").v2;
-
+const jwt = require("jsonwebtoken");
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 const verificationCodes = {};
 const Router = express.Router();
-const userEmail = "adelbert.zieme13@ethereal.email";
+const userEmail = process.env.USER_EMAIL;
+
+require("dotenv").config();
 
 cloudinary.config({
-  cloud_name: "dbkosylcf",
-  api_key: "111175334357878",
-  api_secret: "pqe4cm4967rQIT94C_dOZV329bs",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET_KEY,
 });
 
 const uploadImage = async (base64String) => {
@@ -21,7 +24,6 @@ const uploadImage = async (base64String) => {
   };
 
   try {
-    // Validate Base64 string
     if (!base64String || !base64String.startsWith("data:image")) {
       throw new Error("Invalid image data");
     }
@@ -67,15 +69,13 @@ Router.post("/register", async (req, res) => {
       text: `Your code is: ${code}`,
     });
 
-    // res.status(200).json({ message: "Verification code sent to email" });
-
     let uploadedPhotoUrl = null;
     if (licensePhoto) {
       uploadedPhotoUrl = await uploadImage(licensePhoto);
       console.log("Uploaded photo URL:", uploadedPhotoUrl);
     }
 
-    const newUser = await DriverUserData.create({
+    const newDriverUser = await DriverUserData.create({
       fullname,
       email,
       phone,
@@ -83,8 +83,18 @@ Router.post("/register", async (req, res) => {
       licenseNo,
       licensePhoto: uploadedPhotoUrl,
     });
-    console.log("User created:", newUser);
-    res.status(201).json({ message: "Registered successfully", user: newUser });
+    console.log("User created:", newDriverUser);
+
+    const token = jwt.sign(
+      { _id: newDriverUser._id, email: newDriverUser.email },
+      SECRET_KEY,
+      {
+        expiresIn: "7d",
+      }
+    );
+    res
+      .status(201)
+      .json({ message: "Registered successfully", user: newDriverUser, token });
   } catch (err) {
     console.error("Error during registration:", err);
     res.status(500).json({ message: "Server error", error: err.message });

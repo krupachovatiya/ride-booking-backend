@@ -13,6 +13,9 @@ const paymentSchema = new mongoose.Schema({
   cvc: {
     type: Number,
   },
+  price: {
+    type: Number,
+  },
 });
 
 let Payment = mongoose.model("payment", paymentSchema);
