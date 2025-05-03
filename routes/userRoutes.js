@@ -2,17 +2,31 @@ const express = require("express");
 const User = require("../models/LoginUser");
 const transporter = require("../utils/mailer");
 const UserData = require("../models/User");
+const jwt = require("jsonwebtoken");
+const SECRET_KEY =
+  "a406929be78ab6924730b60822d633cfb846265633e2bf4da0d41a334250c1fb";
 
 const verificationCodes = {};
-const userEmail = process.env.USER_EMAIL;
+const userEmail = "adelbert.zieme13@ethereal.email";
 
 const Router = express.Router();
 require("dotenv").config();
 
 Router.post("/register_varification", async (req, res) => {
-  let data = req.body;
-  let newUser = User.create(data);
-  res.send(newUser);
+  try {
+    const data = req.body;
+    const newUser = await User.create(data);
+    res.status(201).json({
+      message: "Driver registered successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("Error in register_varification:", error);
+    res.status(500).json({
+      message: "Registration failed",
+      error: error.message,
+    });
+  }
 });
 
 Router.post("/register_varification_resend", async (req, res) => {
@@ -55,7 +69,11 @@ Router.post("/login", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ message: "Login successful", log });
+    const token = jwt.sign({ _id: log._id, email: log.email }, SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
+    res.status(200).json({ message: "Login successful", token, log });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server error", error: err.message });
@@ -91,10 +109,23 @@ Router.post("/forgot_pass", async (req, res) => {
   }
 });
 
-Router.post("/forgot_pass_verifycode", (req, res) => {
-  let data = req.body;
-  let newUser = User.create(data);
-  res.send(newUser);
+Router.post("/forgot_pass_verifycode", async (req, res) => {
+  try {
+    const data = req.body;
+
+    const newUser = await User.create(data);
+
+    res.status(201).json({
+      message: "User created successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({
+      message: "Failed to create user",
+      error: error.message,
+    });
+  }
 });
 
 Router.post("/forgot_pass_resend", async (req, res) => {

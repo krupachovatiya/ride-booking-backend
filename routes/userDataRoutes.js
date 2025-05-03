@@ -2,8 +2,9 @@ const express = require("express");
 const UserData = require("../models/User");
 const transporter = require("../utils/mailer");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
-const userEmail = process.env.USER_EMAIL;
+const SECRET_KEY =
+  "a406929be78ab6924730b60822d633cfb846265633e2bf4da0d41a334250c1fb";
+const userEmail = "adelbert.zieme13@ethereal.email";
 
 require("dotenv").config();
 
@@ -31,6 +32,7 @@ Router.post("/register", async (req, res) => {
 
     verificationCodes[email] = code;
 
+    console.log("Email sending in:", email);
     await transporter.sendMail({
       from: userEmail,
       to: email,
@@ -40,16 +42,15 @@ Router.post("/register", async (req, res) => {
 
     const newUser = await UserData.create({ fullname, email, phone, password });
     console.log("User created:", newUser);
-    const token = jwt.sign(
-      { _id: newUser._id, email: newUser.email },
-      SECRET_KEY,
-      {
-        expiresIn: "7d",
-      }
-    );
-    res
-      .status(200)
-      .json({ message: "Registered successfully", token, user: newUser });
+    res.send(newUser);
+    // const token = jwt.sign(
+    //   { _id: newUser._id, email: newUser.email },
+    //   SECRET_KEY,
+    //   {
+    //     expiresIn: "7d",
+    //   }
+    // );
+    res.status(200).json({ message: "Registered successfully", user: newUser });
   } catch (err) {
     console.error("Error during registration:", err);
     res.status(500).json({ message: "Server error", error: err.message });

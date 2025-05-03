@@ -10,9 +10,20 @@ const userEmail = process.env.USER_EMAIL;
 require("dotenv").config();
 
 Router.post("/register_varification", async (req, res) => {
-  let data = req.body;
-  let newUser = DriverUser.create(data);
-  res.send(newUser);
+  try {
+    const data = req.body;
+    const newUser = await DriverUser.create(data);
+    res.status(201).json({
+      message: "Driver registered successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("Error in register_varification:", error);
+    res.status(500).json({
+      message: "Registration failed",
+      error: error.message,
+    });
+  }
 });
 
 Router.post("/register_varify_resend", async (req, res) => {
@@ -93,10 +104,23 @@ Router.post("/forgot_pass", async (req, res) => {
   }
 });
 
-Router.post("/forgot_pass_verifycode", (req, res) => {
-  let data = req.body;
-  let newUser = DriverUser.create(data);
-  res.send(newUser);
+Router.post("/forgot_pass_verifycode", async (req, res) => {
+  try {
+    const data = req.body;
+
+    const newUser = await DriverUser.create(data);
+
+    res.status(201).json({
+      message: "User created successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({
+      message: "Failed to create user",
+      error: error.message,
+    });
+  }
 });
 
 Router.post("/forgot_pass_resend", async (req, res) => {

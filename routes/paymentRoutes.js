@@ -1,5 +1,5 @@
 const express = require("express");
-const Payment = require("../models/Payment");
+// const Payment = require("../models/Payment");
 const cors = require("cors");
 
 require("dotenv").config();
